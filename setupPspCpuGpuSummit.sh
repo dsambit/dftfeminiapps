@@ -13,12 +13,6 @@ fi
 SRC=`dirname $0` # location of source directory
 
 ########################################################################
-#Provide paths below for external libraries, compiler options and flags,
-# and optimization flag
-
-#Paths for required external libraries
-
-#Paths for optional external libraries
 NCCL_PATH="/ccs/proj/mat239/software/ncclnew/build"
 
 #Toggle GPU compilation
@@ -42,9 +36,6 @@ device_flags="-arch=sm_70" # set DCMAKE_CXX_CUDA/HIP_FLAGS
 device_architectures="70" # set DCMAKE_CXX_CUDA/HIP_ARCHITECTURES 
                            #(only applicable for withGPU=ON)
 
-
-#Option to compile with default or higher order quadrature for storing pseudopotential data
-#ON is recommended for MD simulations with hard pseudopotentials
 
 # build type: "Release" or "Debug"
 build_type=Release
