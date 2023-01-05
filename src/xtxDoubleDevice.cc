@@ -54,7 +54,11 @@ namespace dftfe
       const MPI_Comm &                                 mpiCommDomain,
       utils::DeviceCCLWrapper &                        devicecclMpiCommDomain)
     {
+#if defined DFTFE_WITH_CUDA_NCCL || defined DFTFE_WITH_DEVICE_AWARE_MPI    
       const bool useDeviceDirectAllReduce=true;
+#else
+      const bool useDeviceDirectAllReduce=false
+#endif
       const unsigned int numberBlocks     = N / vectorsBlockSize;
 
       // create separate Device streams for data movement and computation
