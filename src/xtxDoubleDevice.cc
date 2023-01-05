@@ -54,10 +54,10 @@ namespace dftfe
       const MPI_Comm &                                 mpiCommDomain,
       utils::DeviceCCLWrapper &                        devicecclMpiCommDomain)
     {
-#if defined DFTFE_WITH_CUDA_NCCL || defined DFTFE_WITH_DEVICE_AWARE_MPI    
+#if defined(DFTFE_WITH_CUDA_NCCL) || defined(DFTFE_WITH_HIP_RCCL) || defined(DFTFE_WITH_DEVICE_AWARE_MPI)    
       const bool useDeviceDirectAllReduce=true;
 #else
-      const bool useDeviceDirectAllReduce=false
+      const bool useDeviceDirectAllReduce=false;
 #endif
       const unsigned int numberBlocks     = N / vectorsBlockSize;
 
@@ -276,16 +276,65 @@ void run (const MPI_Comm & mpi_communicator)
   dftfe::utils::deviceBlasHandle_t deviceblasHandle;
   dftfe::utils::deviceBlasWrapper::create(&deviceblasHandle);
 
+  dftfe::utils::MemoryStorage<double,dftfe::utils::MemorySpace::DEVICE> dMat(100,0.1);
 
-  dftfe::utils::MemoryStorage<double,dftfe::utils::MemorySpace::DEVICE> dA(numberVectors*localNumDofs,1.0/numberVectors);
+  dftfe::utils::deviceStream_t streamDataMove;
+  dftfe::utils::deviceStreamCreate(&streamDataMove);
 
   dftfe::utils::DeviceCCLWrapper gpucclMpiCommDomain;
   gpucclMpiCommDomain.init(MPI_COMM_WORLD);
+
+  for (unsigned int i=0;i<50; i++)
+  {
+                    gpucclMpiCommDomain.deviceDirectAllReduceWrapper(
+                      dMat.begin(),
+                      dMat.begin(),
+                      dMat.size(),
+                      streamDataMove);
+    
+                    MPI_Allreduce(MPI_IN_PLACE,
+                                  dMat.begin(),
+                                  dMat.size(),
+                                  dataTypes::mpi_type_id(
+                                    dMat.begin()),
+                                  MPI_SUM,
+                                  MPI_COMM_WORLD);
+  }
+dftfe::utils::deviceStreamSynchronize(streamDataMove);
+dftfe::utils::deviceStreamDestroy(streamDataMove);
+
+
+  dftfe::utils::MemoryStorage<double,dftfe::utils::MemorySpace::DEVICE> dA(numberVectors*localNumDofs,1.0/numberVectors);
+
   double t1, t2;
   dftfe::utils::deviceSynchronize();
   MPI_Barrier(MPI_COMM_WORLD);
   t1 = MPI_Wtime();
 
+  /*
+  dftfe::utils::deviceStream_t streamDataMove;
+  dftfe::utils::deviceStreamCreate(&streamDataMove);
+
+
+  for (unsigned int i=0;i<50; i++)
+  {
+                    gpucclMpiCommDomain.deviceDirectAllReduceWrapper(
+                      dMat.begin(),
+                      dMat.begin(),
+                      dMat.size(),
+                      streamDataMove);
+    
+                    MPI_Allreduce(MPI_IN_PLACE,
+                                  dMat.begin(),
+                                  dMat.size(),
+                                  dataTypes::mpi_type_id(
+                                    dMat.begin()),
+                                  MPI_SUM,
+                                  MPI_COMM_WORLD);
+  }
+dftfe::utils::deviceStreamSynchronize(streamDataMove);
+dftfe::utils::deviceStreamDestroy(streamDataMove);
+*/
   fillParallelOverlapMatAsyncComputeCommun(
                     dA.begin(),
                     localNumDofs,
