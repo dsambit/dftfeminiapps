@@ -12,8 +12,9 @@ fi
 # Path to project source
 SRC=`dirname $0` # location of source directory
 
-########################################################################
-DCCL_PATH="/ccs/proj/mat187/dsambit/softwareDFTFEGcc/rccl/rccl-rocm-5.1.3/build"
+######################################################################
+DCCL_PATH="/ccs/proj/mat187/dsambit/softwareDFTFEGcc/rcclnew/rccl-rocm-5.3/build"
+#DCCL_PATH="/ccs/proj/mat187/dsambit/softwareDFTFEGcc/rccl/rccl-rocm-5.1.3/build"
 
 #Toggle GPU compilation
 withGPU=ON

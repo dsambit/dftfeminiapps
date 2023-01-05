@@ -245,7 +245,7 @@ void run (const MPI_Comm & mpi_communicator)
   /////INPUTS/////
   const unsigned int globalNumDofs=70000*8;//such that we have roughly 100k to 50k dofs per gpu when scaling from 2 GPU to 4 GPUs
   const unsigned int numberVectors=36600;//must be multiple of vectorsBlockSize
-  const unsigned int vectorsBlockSize=732;
+  const unsigned int vectorsBlockSize=1464;
   ////////////////
   // Get the number of processes
   int nprocs;
