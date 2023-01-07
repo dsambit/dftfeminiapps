@@ -13,14 +13,15 @@ fi
 SRC=`dirname $0` # location of source directory
 
 ######################################################################
-DCCL_PATH="/ccs/proj/mat187/dsambit/softwareDFTFEGcc/rcclnew/rccl-rocm-5.3/build"
+DCCL_PATH="/ccs/proj/mat187/dsambit/softwareDFTFEGcc/rcclnew2/rccl/build"
+#DCCL_PATH="/ccs/proj/mat187/dsambit/softwareDFTFEGcc/rcclnew/rccl-rocm-5.3/build"
 #DCCL_PATH="/ccs/proj/mat187/dsambit/softwareDFTFEGcc/rccl/rccl-rocm-5.1.3/build"
 
 #Toggle GPU compilation
 withGPU=ON
 gpuLang="hip"     # Use "cuda"/"hip"
 gpuVendor="amd" # Use "nvidia/amd"
-withGPUAwareMPI=ON #Please use this option with care
+withGPUAwareMPI=OFF #Please use this option with care
                    #Only use if the machine supports 
                    #device aware MPI and is profiled
                    #to be fast
@@ -53,8 +54,7 @@ build_type=Release
 #fi
 out=`echo "$build_type" | tr '[:upper:]' '[:lower:]'`
 
-function cmake_real() {
-  mkdir -p real && cd real
+function cmake_() {
   if [ "$gpuLang" = "cuda" ]; then
     cmake -DCMAKE_CXX_STANDARD=14 -DCMAKE_CXX_COMPILER=$cxx_compiler\
     -DCMAKE_CXX_FLAGS="$cxx_flags"\
@@ -75,22 +75,5 @@ function cmake_real() {
   fi
 }
 
+cmake_ "$SRC" && make -j8
 
-RCol='\e[0m'
-Blu='\e[0;34m';
-if [ -d "$out" ]; then # build directory exists
-    echo -e "${Blu}$out directory already present${RCol}"
-else
-    rm -rf "$out"
-    echo -e "${Blu}Creating $out ${RCol}"
-    mkdir -p "$out"
-fi
-
-cd $out
-
-echo -e "${Blu}Building Real executable in $build_type mode...${RCol}"
-cmake_real "$SRC" && make -j8
-cd ..
-
-
-echo -e "${Blu}Build complete.${RCol}"

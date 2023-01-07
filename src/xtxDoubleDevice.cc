@@ -34,14 +34,14 @@
 #include <DeviceKernelLauncherConstants.h>
 #include <MemoryStorage.h>
 #include <deviceDirectCCLWrapper.h>
-#include <xtxDoubleDevice.h>
+#include <benchmarks.h>
 #include <dftfeDataTypes.h>
 #include <deviceKernelsGeneric.h>
 
 namespace dftfe
 {
 
-    // X^{T}*XConj in double precision, X is a M x N matrix stored as X^{T} with the
+    // SConj=X^{T}*XConj in double precision, X is a M x N matrix stored as X^{T} with the
     // fastest index goint from 1 to N
 
     void
@@ -237,7 +237,7 @@ namespace dftfe
 
 
 
-void run (const MPI_Comm & mpi_communicator)
+void benchmarkXtX (const MPI_Comm & mpi_communicator)
 {
   // set stdout precision
   std::cout << std::scientific << std::setprecision(18);
@@ -276,6 +276,7 @@ void run (const MPI_Comm & mpi_communicator)
   dftfe::utils::deviceBlasHandle_t deviceblasHandle;
   dftfe::utils::deviceBlasWrapper::create(&deviceblasHandle);
 
+  //Begin warm up of NCCL/RCCL
   dftfe::utils::MemoryStorage<double,dftfe::utils::MemorySpace::DEVICE> dMat(100,0.1);
 
   dftfe::utils::deviceStream_t streamDataMove;
@@ -303,6 +304,7 @@ void run (const MPI_Comm & mpi_communicator)
 dftfe::utils::deviceStreamSynchronize(streamDataMove);
 dftfe::utils::deviceStreamDestroy(streamDataMove);
 
+  //End warm up of NCCL/RCCL
 
   dftfe::utils::MemoryStorage<double,dftfe::utils::MemorySpace::DEVICE> dA(numberVectors*localNumDofs,1.0/numberVectors);
 
@@ -311,30 +313,6 @@ dftfe::utils::deviceStreamDestroy(streamDataMove);
   MPI_Barrier(MPI_COMM_WORLD);
   t1 = MPI_Wtime();
 
-  /*
-  dftfe::utils::deviceStream_t streamDataMove;
-  dftfe::utils::deviceStreamCreate(&streamDataMove);
-
-
-  for (unsigned int i=0;i<50; i++)
-  {
-                    gpucclMpiCommDomain.deviceDirectAllReduceWrapper(
-                      dMat.begin(),
-                      dMat.begin(),
-                      dMat.size(),
-                      streamDataMove);
-    
-                    MPI_Allreduce(MPI_IN_PLACE,
-                                  dMat.begin(),
-                                  dMat.size(),
-                                  dataTypes::mpi_type_id(
-                                    dMat.begin()),
-                                  MPI_SUM,
-                                  MPI_COMM_WORLD);
-  }
-dftfe::utils::deviceStreamSynchronize(streamDataMove);
-dftfe::utils::deviceStreamDestroy(streamDataMove);
-*/
   fillParallelOverlapMatAsyncComputeCommun(
                     dA.begin(),
                     localNumDofs,
@@ -348,7 +326,6 @@ dftfe::utils::deviceStreamDestroy(streamDataMove);
   t2 = MPI_Wtime();
   if (this_process==0)
   std::cout<<"Time in seconds: "<<t2-t1<<std::endl;
-  //compute frobenius norm of overlap matrix and compare with test folder output
 
 
   dftfe::utils::deviceBlasWrapper::destroy(deviceblasHandle); 

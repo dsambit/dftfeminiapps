@@ -16,14 +16,16 @@
 // @author Sambit Das
 //
 
-#ifndef dftfextxDoubleDevice_h
-#define dftfextxDoubleDevice_h
+#ifndef dftfeBenchmarks_h
+#define dftfeBenchmarks_h
 
 
 #include <mpi.h>
 namespace dftfe
 {
-  void run(const MPI_Comm & mpi_communicator);
+  void benchmarkXtX(const MPI_Comm & mpi_communicator);
+
+  void benchmarkDeviceDirectMPIAllreduce(const MPI_Comm & mpi_communicator);
 }
 
 #endif

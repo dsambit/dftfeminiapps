@@ -44,6 +44,7 @@ endif()
 # Declare all source files the target consists of:
 SET(TARGET_SRC
   ./src/xtxDoubleDevice.cc
+  ./src/deviceDirectMPIAllreduce.cc
   ./utils/Exceptions.cc
   ./utils/MemoryManager.cc
   )

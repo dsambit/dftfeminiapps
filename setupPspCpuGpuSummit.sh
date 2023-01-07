@@ -51,8 +51,7 @@ build_type=Release
 #fi
 out=`echo "$build_type" | tr '[:upper:]' '[:lower:]'`
 
-function cmake_real() {
-  mkdir -p real && cd real
+function cmake_() {
   if [ "$gpuLang" = "cuda" ]; then
     cmake -DCMAKE_CXX_STANDARD=14 -DCMAKE_CXX_COMPILER=$cxx_compiler\
     -DCMAKE_CXX_FLAGS="$cxx_flags"\
@@ -73,22 +72,4 @@ function cmake_real() {
   fi
 }
 
-
-RCol='\e[0m'
-Blu='\e[0;34m';
-if [ -d "$out" ]; then # build directory exists
-    echo -e "${Blu}$out directory already present${RCol}"
-else
-    rm -rf "$out"
-    echo -e "${Blu}Creating $out ${RCol}"
-    mkdir -p "$out"
-fi
-
-cd $out
-
-echo -e "${Blu}Building Real executable in $build_type mode...${RCol}"
-cmake_real "$SRC" && make -j8
-cd ..
-
-
-echo -e "${Blu}Build complete.${RCol}"
+cmake_ "$SRC" && make -j8
