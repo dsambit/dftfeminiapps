@@ -13,19 +13,19 @@ fi
 SRC=`dirname $0` # location of source directory
 
 ########################################################################
-NCCL_PATH="/ccs/proj/mat239/software/ncclnew/build"
+DCCL_PATH="/ccs/proj/mat239/software/ncclnew/build"
 
 #Toggle GPU compilation
 withGPU=ON
 gpuLang="cuda"     # Use "cuda"/"hip"
 gpuVendor="nvidia" # Use "nvidia/amd"
-withGPUAwareMPI=OFF #Please use this option with care
+withGPUAwareMPI=ON #Please use this option with care
                    #Only use if the machine supports 
                    #device aware MPI and is profiled
                    #to be fast
 
-#Option to link to NCCL library (Only for GPU compilation)
-withNCCL=ON
+#Option to link to NCCL/RCCL library (Only for GPU compilation)
+withDCCL=ON
 
 #Compiler options and flags
 cxx_compiler=mpic++  #sets DCMAKE_CXX_COMPILER
@@ -57,7 +57,7 @@ function cmake_() {
     -DCMAKE_CXX_FLAGS="$cxx_flags"\
     -DCMAKE_CXX_FLAGS_RELEASE="$cxx_flagsRelease" \
     -DCMAKE_BUILD_TYPE=$build_type \
-    -DWITH_NCCL=$withNCCL -DCMAKE_PREFIX_PATH="$NCCL_PATH"\
+    -DWITH_DCCL=$withDCCL -DCMAKE_PREFIX_PATH="$DCCL_PATH"\
     -DWITH_GPU=$withGPU -DGPU_LANG=$gpuLang -DGPU_VENDOR=$gpuVendor -DWITH_GPU_AWARE_MPI=$withGPUAwareMPI -DCMAKE_CUDA_FLAGS="$device_flags" -DCMAKE_CUDA_ARCHITECTURES="$device_architectures"\
     $1
   elif [ "$gpuLang" = "hip" ]; then
@@ -65,7 +65,7 @@ function cmake_() {
     -DCMAKE_CXX_FLAGS="$cxx_flags"\
     -DCMAKE_CXX_FLAGS_RELEASE="$cxx_flagsRelease" \
     -DCMAKE_BUILD_TYPE=$build_type \
-    -DWITH_NCCL=$withNCCL -DCMAKE_PREFIX_PATH="$NCCL_PATH"\
+    -DWITH_DCCL=$withDCCL -DCMAKE_PREFIX_PATH="$DCCL_PATH"\
     -DWITH_GPU=$withGPU -DGPU_LANG=$gpuLang -DGPU_VENDOR=$gpuVendor -DWITH_GPU_AWARE_MPI=$withGPUAwareMPI -DCMAKE_HIP_FLAGS="$device_flags" -DCMAKE_HIP_ARCHITECTURES="$device_architectures"\
     -DCMAKE_SHARED_LINKER_FLAGS="-L${ROCM_PATH}/lib -lamdhip64 -L${MPICH_DIR}/lib -lmpi -L${CRAY_MPICH_ROOTDIR}/gtl/lib -lmpi_gtl_hsa"\
      $1
