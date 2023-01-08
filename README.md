@@ -2,10 +2,11 @@ This repository is designed to compile with minimal dependencies:
 CXX compilers, GPU aware MPI library and optionally NCCL/RCCL libraries.
 Currently there are two bencharks that can be called be src/main.cc:
 
-* benchmarkDeviceDirectMPIAllreduce: benchmarks GPU direct MPI\_Allreduce call
+* [1] benchmarkDeviceDirectMPIAllreduce: benchmarks GPU direct MPI\_Allreduce call
  on a double array on the GPU with 1e+7 entries
+* [2] benchmarkXtX: overlap matrix computation in double precision (cf. https://arxiv.org/abs/2203.07820), with blocked loop and asynchronous compute and communication with streams 
   
-  Summit results 
+  Summit results on benchmarkDeviceDirectMPIAllreduce
   -------------
 ```
    module swap xl/16.1.1-10 gcc/9.1.0
@@ -29,7 +30,7 @@ Time in seconds for GPU Direct MPI_Allreduce using NCCL/RCCL: 2.9785970400000039
 Time in seconds for GPU Direct MPI_Allreduce using standard MPI library: 3.921587415999999493e+00  
 ```
 
-  Crusher results 
+  Crusher results on benchmarkDeviceDirectMPIAllreduce
   -------------
 ```
    module load PrgEnv-gnu
@@ -55,7 +56,7 @@ Time in seconds for GPU Direct MPI_Allreduce using NCCL/RCCL: 2.9786730240002725
 Time in seconds for GPU Direct MPI_Allreduce using standard MPI library: 5.049497311999857629e+00
 ```
 
-* benchmarkXtX: overlap matrix computation in double precision (cf. https://arxiv.org/abs/2203.07820), with blocked loop and asynchronous compute and communication with streams   
+  
 
 Steps to compile
 ==========================================
