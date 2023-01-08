@@ -22,6 +22,7 @@ Currently there are two bencharks that can be called be src/main.cc:
   Time in seconds for GPU Direct MPI\_Allreduce using NCCL/RCCL: 2.367997640000001347e-01
   Time in seconds for GPU Direct MPI\_Allreduce using standard MPI library: 3.096087765000000047e+00
   ```
+
   2 nodes and 12 GPUs:
   ```
 Time in seconds for GPU Direct MPI_Allreduce using NCCL/RCCL: 2.978597040000003915e-01
@@ -40,7 +41,7 @@ Time in seconds for GPU Direct MPI_Allreduce using standard MPI library: 3.92158
    export MPICH_GPU_SUPPORT_ENABLED=1
    export PE_MPICH_GTL_DIR_amd_gfx90a="-L${CRAY_MPICH_ROOTDIR}/gtl/lib"
    export PE_MPICH_GTL_LIBS_amd_gfx90a="-lmpi_gtl_hsa"
- ```
+  ```
 
   1 node and 8 GCDs:
   ```
