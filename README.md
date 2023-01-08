@@ -1,6 +1,6 @@
 This repository is designed to compile with minimal dependencies:
 CXX compilers, GPU aware MPI library and optionally NCCL/RCCL libraries.
-Currently there are two bencharks that can be called be src/main.cc:
+Currently there are two bencharks that are called from src/main.cc:
 
 * [1] benchmarkDeviceDirectMPIAllreduce: benchmarks GPU direct MPI\_Allreduce call
  on a double array on the GPU with 1e+7 entries
@@ -11,11 +11,11 @@ Steps to compile
 ==========================================
 * Install NCCL/RCCL library or load the appropriate module if available
 
-* Modify setupUserCrusherDFTFE.sh  
+* Modify setupCrusher.sh to set CXX compiler, CXX compiler flags, NCCL/RCCL library paths, and CUDA/HIP compiler paths.
 
 * mkdir build and cd build (this directory can be created anywhere)
 
-* bash `dftfeSourceFullPath'/setupUserCrusherDFTFE.sh  
+* bash `dftfeSourceFullPath'/setupCrusher.sh  
   
 Summit results on benchmarkDeviceDirectMPIAllreduce
 -------------
