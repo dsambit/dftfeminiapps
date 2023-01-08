@@ -44,13 +44,14 @@ Time in seconds for GPU Direct MPI_Allreduce using standard MPI library: 3.92158
 
   1 node and 8 GCDs:
   ```
-  Time in seconds for GPU Direct MPI\_Allreduce using NCCL/RCCL: 2.367997640000001347e-01
-  Time in seconds for GPU Direct MPI\_Allreduce using standard MPI library: 3.096087765000000047e+00
+Time in seconds for GPU Direct MPI_Allreduce using NCCL/RCCL: 8.236887570001272252e-01
+Time in seconds for GPU Direct MPI_Allreduce using standard MPI library: 4.652598662999935186e+00  
   ```
   2 nodes and 16 GCDs:
   ```
-Time in seconds for GPU Direct MPI_Allreduce using NCCL/RCCL: 2.978597040000003915e-01
-Time in seconds for GPU Direct MPI_Allreduce using standard MPI library: 3.921587415999999493e+00  
+Time in seconds for GPU Direct MPI_Allreduce using NCCL/RCCL: 2.978673024000272562e+00
+Time in seconds for GPU Direct MPI_Allreduce using standard MPI library: 5.049497311999857629e+00
+  ```
 
 * benchmarkXtX: overlap matrix computation in double precision (cf. https://arxiv.org/abs/2203.07820), with blocked loop and asynchronous compute and communication with streams   
 
