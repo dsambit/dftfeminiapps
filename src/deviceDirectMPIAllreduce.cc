@@ -69,13 +69,11 @@ void benchmarkDeviceDirectMPIAllreduce (const MPI_Comm & mpi_communicator)
   dftfe::utils::deviceStreamCreate(&streamDataMove);
 
   for (unsigned int i=0;i<50; i++)
-  {
       gpucclMpiCommDomain.deviceDirectAllReduceWrapper(
                       dMat.begin(),
                       dMat.begin(),
                       dMat.size(),
                       streamDataMove);
-  }
   
   dftfe::utils::deviceStreamSynchronize(streamDataMove);
   dftfe::utils::deviceStreamDestroy(streamDataMove);
@@ -93,8 +91,8 @@ void benchmarkDeviceDirectMPIAllreduce (const MPI_Comm & mpi_communicator)
   MPI_Barrier(MPI_COMM_WORLD);
   t1 = MPI_Wtime();
 
-
-  MPI_Allreduce(MPI_IN_PLACE,
+  for (unsigned int i=0;i<50; i++)
+     MPI_Allreduce(MPI_IN_PLACE,
                                   dMat.begin(),
                                   dMat.size(),
                                   dataTypes::mpi_type_id(
