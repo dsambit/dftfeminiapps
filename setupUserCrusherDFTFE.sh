@@ -21,7 +21,7 @@ DCCL_PATH="/ccs/proj/mat187/dsambit/softwareDFTFEGcc/rcclnew2/rccl/build"
 withGPU=ON
 gpuLang="hip"     # Use "cuda"/"hip"
 gpuVendor="amd" # Use "nvidia/amd"
-withGPUAwareMPI=OFF #Please use this option with care
+withGPUAwareMPI=ON #Please use this option with care
                    #Only use if the machine supports 
                    #device aware MPI and is profiled
                    #to be fast
