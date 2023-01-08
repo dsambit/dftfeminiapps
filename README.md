@@ -6,8 +6,19 @@ Currently there are two bencharks that can be called be src/main.cc:
  on a double array on the GPU with 1e+7 entries
 * [2] benchmarkXtX: overlap matrix computation in double precision (cf. https://arxiv.org/abs/2203.07820), with blocked loop and asynchronous compute and communication with streams 
   
-  Summit results on benchmarkDeviceDirectMPIAllreduce
-  -------------
+
+Steps to compile
+==========================================
+* Install NCCL/RCCL library or load the appropriate module if available
+
+* Modify setupUserCrusherDFTFE.sh  
+
+* mkdir build and cd build (this directory can be created anywhere)
+
+* bash `dftfeSourceFullPath'/setupUserCrusherDFTFE.sh  
+  
+Summit results on benchmarkDeviceDirectMPIAllreduce
+-------------
 ```
    module swap xl/16.1.1-10 gcc/9.1.0
    module load cmake
@@ -30,8 +41,8 @@ Time in seconds for GPU Direct MPI_Allreduce using NCCL/RCCL: 2.9785970400000039
 Time in seconds for GPU Direct MPI_Allreduce using standard MPI library: 3.921587415999999493e+00  
 ```
 
-  Crusher results on benchmarkDeviceDirectMPIAllreduce
-  -------------
+ Crusher results on benchmarkDeviceDirectMPIAllreduce
+ -------------
 ```
    module load PrgEnv-gnu
    module load craype-accel-amd-gfx90a
@@ -58,12 +69,3 @@ Time in seconds for GPU Direct MPI_Allreduce using standard MPI library: 5.04949
 
   
 
-Steps to compile
-==========================================
-* Install NCCL/RCCL library or load the appropriate module if available
-
-* Modify setupUserCrusherDFTFE.sh  
-
-* mkdir build and cd build (this directory can be created anywhere)
-
-* bash `dftfeSourceFullPath'/setupUserCrusherDFTFE.sh
