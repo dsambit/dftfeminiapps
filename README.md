@@ -15,7 +15,7 @@ Steps to compile
 
 * mkdir build and cd build (this directory can be created anywhere)
 
-* bash `dftfeSourceFullPath'/setupCrusher.sh  
+* bash `miniappSourceFullPath'/setupCrusher.sh  
   
 Summit results on benchmarkDeviceDirectMPIAllreduce
 -------------
