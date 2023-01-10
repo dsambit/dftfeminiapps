@@ -67,5 +67,27 @@ Time in seconds for GPU Direct MPI_Allreduce using NCCL/RCCL: 2.9786730240002725
 Time in seconds for GPU Direct MPI_Allreduce using standard MPI library: 5.049497311999857629e+00
 ```
 
+```
+  1) craype-x86-trento                      10) PrgEnv-gnu/8.3.3
+  2) libfabric/1.15.0.0                     11) xalt/1.3.0
+  3) craype-network-ofi                     12) DefApps/default
+  4) perftools-base/22.06.0                 13) craype-accel-amd-gfx90a
+  5) xpmem/2.4.4-2.3_11.2__gff0e1d9.shasta  14) rocm/5.4.0
+  6) cray-pmi/6.1.3                         15) cray-mpich/8.1.23
+  7) gcc/11.2.0                             16) cmake/3.23.2
+  8) craype/2.7.16                          17) openblas/0.3.17
+  9) cray-dsmml/0.2.2
+```
+
+  1 node and 8 GCDs:
+```
+Time in seconds for GPU Direct MPI_Allreduce using NCCL/RCCL: 8.236887570001272252e-01
+Time in seconds for GPU Direct MPI_Allreduce using standard MPI library: 4.652598662999935186e+00  
+```
   
+  2 nodes and 16 GCDs:
+```
+Time in seconds for GPU Direct MPI_Allreduce using NCCL/RCCL: 2.978673024000272562e+00
+Time in seconds for GPU Direct MPI_Allreduce using standard MPI library: 5.049497311999857629e+00
+```  
 
