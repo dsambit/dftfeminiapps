@@ -13,9 +13,9 @@ fi
 SRC=`dirname $0` # location of source directory
 
 ######################################################################
-#DCCL_PATH="/ccs/proj/mat187/dsambit/softwareDFTFEGcc/rcclnew2/rccl/build"
+DCCL_PATH="/ccs/proj/mat187/dsambit/softwareDFTFEGccMpichLatest/rccl/rccl/build"
 #DCCL_PATH="/ccs/proj/mat187/dsambit/softwareDFTFEGcc/rcclnew/rccl-rocm-5.3/build"
-DCCL_PATH="/ccs/proj/mat187/dsambit/softwareDFTFEGcc/rccl/rccl-rocm-5.1.3/build"
+#DCCL_PATH="/ccs/proj/mat187/dsambit/softwareDFTFEGcc/rccl/rccl-rocm-5.1.3/build"
 
 #Toggle GPU compilation
 withGPU=ON
@@ -27,13 +27,13 @@ withGPUAwareMPI=ON #Please use this option with care
                    #to be fast
 
 #Option to link to NCCL library (Only for GPU compilation)
-withDCCL=ON
+withDCCL=OFF
 
 #Compiler options and flags
 cxx_compiler=CC  #sets DCMAKE_CXX_COMPILER
-cxx_flags="-march=znver3 -fPIC -I${MPICH_DIR}/include -I${ROCM_PATH}/include" #sets DCMAKE_CXX_FLAGS
+cxx_flags="-fPIC -I${MPICH_DIR}/include -I${ROCM_PATH}/include" #sets DCMAKE_CXX_FLAGS
 cxx_flagsRelease="-O2" #sets DCMAKE_CXX_FLAGS_RELEASE
-device_flags="-march=znver3 -O2 -munsafe-fp-atomics -I${MPICH_DIR}/include -I${ROCM_PATH}/include"
+device_flags="-O2 -munsafe-fp-atomics -I${MPICH_DIR}/include -I${ROCM_PATH}/include"
                            #setDCMAKE_CXX_CUDA/HIP_FLAGS 
                            #(only applicable for withGPU=ON)
 device_architectures="gfx90a" # set DCMAKE_CXX_CUDA/HIP_ARCHITECTURES 

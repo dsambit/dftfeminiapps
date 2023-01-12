@@ -243,9 +243,9 @@ void benchmarkXtX (const MPI_Comm & mpi_communicator)
   std::cout << std::scientific << std::setprecision(18);
 
   /////INPUTS/////
-  const unsigned int globalNumDofs=70000*8;//such that we have roughly 100k to 50k dofs per gpu when scaling from 2 GPU to 4 GPUs
+  const unsigned int globalNumDofs=70000;//such that we have roughly 100k to 50k dofs per gpu when scaling from 2 GPU to 4 GPUs
   const unsigned int numberVectors=36600;//must be multiple of vectorsBlockSize
-  const unsigned int vectorsBlockSize=1464;
+  const unsigned int vectorsBlockSize=732;
   ////////////////
   // Get the number of processes
   int nprocs;
@@ -276,35 +276,9 @@ void benchmarkXtX (const MPI_Comm & mpi_communicator)
   dftfe::utils::deviceBlasHandle_t deviceblasHandle;
   dftfe::utils::deviceBlasWrapper::create(&deviceblasHandle);
 
-  //Begin warm up of NCCL/RCCL
-  dftfe::utils::MemoryStorage<double,dftfe::utils::MemorySpace::DEVICE> dMat(100,0.1);
-
-  dftfe::utils::deviceStream_t streamDataMove;
-  dftfe::utils::deviceStreamCreate(&streamDataMove);
-
   dftfe::utils::DeviceCCLWrapper gpucclMpiCommDomain;
   gpucclMpiCommDomain.init(MPI_COMM_WORLD);
 
-  for (unsigned int i=0;i<50; i++)
-  {
-                    gpucclMpiCommDomain.deviceDirectAllReduceWrapper(
-                      dMat.begin(),
-                      dMat.begin(),
-                      dMat.size(),
-                      streamDataMove);
-    
-                    MPI_Allreduce(MPI_IN_PLACE,
-                                  dMat.begin(),
-                                  dMat.size(),
-                                  dataTypes::mpi_type_id(
-                                    dMat.begin()),
-                                  MPI_SUM,
-                                  MPI_COMM_WORLD);
-  }
-dftfe::utils::deviceStreamSynchronize(streamDataMove);
-dftfe::utils::deviceStreamDestroy(streamDataMove);
-
-  //End warm up of NCCL/RCCL
 
   dftfe::utils::MemoryStorage<double,dftfe::utils::MemorySpace::DEVICE> dA(numberVectors*localNumDofs,1.0/numberVectors);
 

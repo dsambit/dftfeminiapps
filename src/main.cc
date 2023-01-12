@@ -36,8 +36,8 @@ main(int argc, char *argv[])
   const double start = MPI_Wtime();
   int          world_rank;
   MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
-  dftfe::benchmarkDeviceDirectMPIAllreduce(MPI_COMM_WORLD);
-  //dftfe::benchmarkXtX(MPI_COMM_WORLD);
+  //dftfe::benchmarkDeviceDirectMPIAllreduce(MPI_COMM_WORLD);
+  dftfe::benchmarkXtX(MPI_COMM_WORLD);
   MPI_Finalize();
   return 0;
 }
