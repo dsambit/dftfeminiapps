@@ -2,9 +2,9 @@ This repository is designed to compile with minimal dependencies:
 CXX compilers, GPU aware MPI library and optionally NCCL/RCCL libraries.
 Currently there are two bencharks that are called from src/main.cc:
 
-* [1] benchmarkDeviceDirectMPIAllreduce: benchmarks GPU direct MPI\_Allreduce called 50 times 
+* [1] benchmarkDeviceDirectMPIAllreduce (src/deviceDirectMPIAllreduce.cc): benchmarks GPU direct MPI\_Allreduce called 50 times 
  on a double array on the GPU with 1e+7 entries
-* [2] benchmarkXtX: overlap matrix computation in double precision (cf. https://arxiv.org/abs/2203.07820), with blocked loop and asynchronous compute and communication implemented using CUDA/HIP streams 
+* [2] benchmarkXtX (src/xtxDoubleDevice.cc): overlap matrix computation in double precision (cf. https://arxiv.org/abs/2203.07820), with blocked loop and asynchronous compute and communication implemented using CUDA/HIP streams 
   
 
 Steps to compile
@@ -15,7 +15,7 @@ Steps to compile
 
 * mkdir build and cd build (this directory can be created anywhere)
 
-* bash `dftfeSourceFullPath'/setupCrusher.sh  
+* bash `miniappSourceFullPath'/setupCrusher.sh  
   
 Summit results on benchmarkDeviceDirectMPIAllreduce
 -------------
@@ -53,6 +53,8 @@ Time in seconds for GPU Direct MPI_Allreduce using standard MPI library: 3.92158
    export MPICH_GPU_SUPPORT_ENABLED=1
    export PE_MPICH_GTL_DIR_amd_gfx90a="-L${CRAY_MPICH_ROOTDIR}/gtl/lib"
    export PE_MPICH_GTL_LIBS_amd_gfx90a="-lmpi_gtl_hsa"
+   
+   and 5.1.3 RCCL version compatible with 5.1.0 ROCm version
 ```
 
   1 node and 8 GCDs:
@@ -67,5 +69,29 @@ Time in seconds for GPU Direct MPI_Allreduce using NCCL/RCCL: 2.9786730240002725
 Time in seconds for GPU Direct MPI_Allreduce using standard MPI library: 5.049497311999857629e+00
 ```
 
+```
+   module load PrgEnv-gnu
+   module load craype-accel-amd-gfx90a
+   module load rocm/5.4.0
+   module load cray-mpich/8.1.23
+   module load cmake
+   module unload cray-libsci
+   export MPICH_GPU_SUPPORT_ENABLED=1
+   export PE_MPICH_GTL_DIR_amd_gfx90a="-L${CRAY_MPICH_ROOTDIR}/gtl/lib"
+   export PE_MPICH_GTL_LIBS_amd_gfx90a="-lmpi_gtl_hsa"
+
+and development branch of RCCL 
+```
+
+  1 node and 8 GCDs:
+```
+Time in seconds for GPU Direct MPI_Allreduce using NCCL/RCCL: 5.710980999992898433e-02
+Time in seconds for GPU Direct MPI_Allreduce using standard MPI library: 4.663486804999593005e+00
+```
   
+  2 nodes and 16 GCDs:
+```
+Time in seconds for GPU Direct MPI_Allreduce using NCCL/RCCL: 2.238994716999968659e+00
+Time in seconds for GPU Direct MPI_Allreduce using standard MPI library: 5.128894410000157222e+00
+```  
 
