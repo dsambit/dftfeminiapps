@@ -41,12 +41,12 @@
 namespace dftfe
 {
 
-    // SConj=X^{T}*XConj in double precision, X is a M x N matrix stored as X^{T} with the
+    // SConj=X^{T}*XConj in std::complex<double> precision, X is a M x N matrix stored as X^{T} with the
     // fastest index goint from 1 to N
 
     void
     fillParallelOverlapMatAsyncComputeCommun(
-      const double *                        X,
+      const std::complex<double> *                        X,
       const unsigned int                               M,
       const unsigned int                               N,
       const unsigned int vectorsBlockSize,
@@ -83,24 +83,34 @@ namespace dftfe
         }
 
       // create pinned memory used later to copy from Device->CPU
-      dftfe::utils::MemoryStorage<double,
+      dftfe::utils::MemoryStorage<std::complex<double>,
                                   dftfe::utils::MemorySpace::HOST_PINNED>
         overlapMatrixBlockHost;
       overlapMatrixBlockHost.resize(N * vectorsBlockSize, 0);
       std::memset(overlapMatrixBlockHost.begin(),
                   0,
-                  vectorsBlockSize * N * sizeof(double));
+                  vectorsBlockSize * N * sizeof(std::complex<double>));
 
       // allocate device vectors to be used later
-      dftfe::utils::MemoryStorage<double,
+      dftfe::utils::MemoryStorage<std::complex<double>,
                                   dftfe::utils::MemorySpace::DEVICE>
-        overlapMatrixBlock(N * vectorsBlockSize, double(0));
-      dftfe::utils::MemoryStorage<double,
+        overlapMatrixBlock(N * vectorsBlockSize, std::complex<double>(0));
+      dftfe::utils::MemoryStorage<std::complex<double>,
                                   dftfe::utils::MemorySpace::DEVICE>
-        overlapMatrixBlockNext(N * vectorsBlockSize, double(0));
+        overlapMatrixBlockNext(N * vectorsBlockSize, std::complex<double>(0));
 
-      const double scalarCoeffAlpha = double(1.0);
-      const double scalarCoeffBeta  = double(0);
+      const std::complex<double> scalarCoeffAlpha = std::complex<double>(1.0);
+      const std::complex<double> scalarCoeffBeta  = std::complex<double>(0);
+
+      dftfe::utils::MemoryStorage<double,
+                                  dftfe::utils::MemorySpace::DEVICE>
+        tempReal;
+      dftfe::utils::MemoryStorage<double,
+                                  dftfe::utils::MemorySpace::DEVICE>
+        tempImag;
+          
+      tempReal.resize(vectorsBlockSize * N, 0);
+      tempImag.resize(vectorsBlockSize * N, 0);
 
 
       unsigned int blockCount = 0;
@@ -116,7 +126,7 @@ namespace dftfe
                   dftfe::utils::deviceBlasWrapper::gemm(
                     handle,
                     dftfe::utils::DEVICEBLAS_OP_N,
-                      dftfe::utils::DEVICEBLAS_OP_T,
+                      dftfe::utils::DEVICEBLAS_OP_C,
                     D,
                     B,
                     M,
@@ -178,11 +188,14 @@ namespace dftfe
                 {
                   // Sum local XTrunc^{T}*XcBlock across domain decomposition
                   // processors
-                    devicecclMpiCommDomain.deviceDirectAllReduceWrapper(
+                  devicecclMpiCommDomain.deviceDirectAllReduceWrapper(
                       overlapMatrixBlock.begin(),
                       overlapMatrixBlock.begin(),
                       D * B,
+                      tempReal.begin(),
+                      tempImag.begin(),
                       streamDataMove);
+
                }
               
               dftfe::utils::deviceMemcpyAsyncD2H(
@@ -190,7 +203,7 @@ namespace dftfe
                   overlapMatrixBlockHost.begin()),
                 dftfe::utils::makeDataTypeDeviceCompatible(
                   overlapMatrixBlock.begin()),
-                D * B * sizeof(double),
+                D * B * sizeof(std::complex<double>),
                 streamDataMove);
 
               // record completion of Device->CPU copy for current block
@@ -237,7 +250,7 @@ namespace dftfe
 
 
 
-void benchmarkXtXDouble(const MPI_Comm & mpi_communicator)
+void benchmarkXtXComplexDouble(const MPI_Comm & mpi_communicator)
 {
   // set stdout precision
   std::cout << std::scientific << std::setprecision(18);
@@ -280,7 +293,7 @@ void benchmarkXtXDouble(const MPI_Comm & mpi_communicator)
   gpucclMpiCommDomain.init(MPI_COMM_WORLD);
 
 
-  dftfe::utils::MemoryStorage<double,dftfe::utils::MemorySpace::DEVICE> dA(numberVectors*localNumDofs,1.0/numberVectors);
+  dftfe::utils::MemoryStorage<std::complex<double>,dftfe::utils::MemorySpace::DEVICE> dA(numberVectors*localNumDofs,1.0/numberVectors);
 
   double t1, t2;
   dftfe::utils::deviceSynchronize();

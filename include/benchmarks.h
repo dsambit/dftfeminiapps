@@ -23,7 +23,9 @@
 #include <mpi.h>
 namespace dftfe
 {
-  void benchmarkXtX(const MPI_Comm & mpi_communicator);
+  void benchmarkXtXDouble(const MPI_Comm & mpi_communicator);
+
+  void benchmarkXtXComplexDouble(const MPI_Comm & mpi_communicator);  
 
   void benchmarkDeviceDirectMPIAllreduce(const MPI_Comm & mpi_communicator);
 }
