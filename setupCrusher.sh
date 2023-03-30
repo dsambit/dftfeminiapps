@@ -13,7 +13,8 @@ fi
 SRC=`dirname $0` # location of source directory
 
 ######################################################################
-DCCL_PATH="/ccs/proj/mat187/dsambit/softwareDFTFEGccMpichLatest/rccl/rccl/build"
+DCCL_PATH="$ROCM_PATH/rccl"
+#DCCL_PATH="/ccs/proj/mat187/dsambit/softwareDFTFEGccMpichLatest/rccl/rccl/build"
 #DCCL_PATH="/ccs/proj/mat187/dsambit/softwareDFTFEGcc/rcclnew/rccl-rocm-5.3/build"
 #DCCL_PATH="/ccs/proj/mat187/dsambit/softwareDFTFEGcc/rccl/rccl-rocm-5.1.3/build"
 
@@ -27,7 +28,7 @@ withGPUAwareMPI=ON #Please use this option with care
                    #to be fast
 
 #Option to link to NCCL library (Only for GPU compilation)
-withDCCL=OFF
+withDCCL=ON
 
 #Compiler options and flags
 cxx_compiler=CC  #sets DCMAKE_CXX_COMPILER

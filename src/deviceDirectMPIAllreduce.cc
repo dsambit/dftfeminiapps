@@ -53,7 +53,7 @@ void benchmarkDeviceDirectMPIAllreduce (const MPI_Comm & mpi_communicator)
   dftfe::utils::deviceKernelsGeneric::setupDevice();
 
 
-  dftfe::utils::MemoryStorage<double,dftfe::utils::MemorySpace::DEVICE> dMat(10000000,0.1);
+  dftfe::utils::MemoryStorage<double,dftfe::utils::MemorySpace::DEVICE> dMat(4000000,0.1);
   double t1, t2;
 
 #  if defined(DFTFE_WITH_CUDA_NCCL) || defined(DFTFE_WITH_HIP_RCCL)
@@ -61,12 +61,20 @@ void benchmarkDeviceDirectMPIAllreduce (const MPI_Comm & mpi_communicator)
   dftfe::utils::DeviceCCLWrapper gpucclMpiCommDomain;
   gpucclMpiCommDomain.init(MPI_COMM_WORLD);
 
+  dftfe::utils::deviceStream_t streamDataMove;
+  dftfe::utils::deviceStreamCreate(&streamDataMove);
+
+  for (unsigned int i=0;i<5; i++)
+      gpucclMpiCommDomain.deviceDirectAllReduceWrapper(
+                      dMat.begin(),
+                      dMat.begin(),
+                      dMat.size(),
+                      streamDataMove);
+
+
   dftfe::utils::deviceSynchronize();
   MPI_Barrier(MPI_COMM_WORLD);
   t1 = MPI_Wtime();
-
-  dftfe::utils::deviceStream_t streamDataMove;
-  dftfe::utils::deviceStreamCreate(&streamDataMove);
 
   for (unsigned int i=0;i<50; i++)
       gpucclMpiCommDomain.deviceDirectAllReduceWrapper(
@@ -75,8 +83,6 @@ void benchmarkDeviceDirectMPIAllreduce (const MPI_Comm & mpi_communicator)
                       dMat.size(),
                       streamDataMove);
   
-  dftfe::utils::deviceStreamSynchronize(streamDataMove);
-  dftfe::utils::deviceStreamDestroy(streamDataMove);
 
   dftfe::utils::deviceSynchronize();
   MPI_Barrier(MPI_COMM_WORLD);
@@ -84,9 +90,25 @@ void benchmarkDeviceDirectMPIAllreduce (const MPI_Comm & mpi_communicator)
   if (this_process==0)
   std::cout<<"Time in seconds for GPU Direct MPI_Allreduce using NCCL/RCCL: "<<t2-t1<<std::endl;
 
+
+  dftfe::utils::deviceStreamSynchronize(streamDataMove);
+  dftfe::utils::deviceStreamDestroy(streamDataMove);
+
 #endif
 
 #if DFTFE_WITH_DEVICE_AWARE_MPI
+
+  for (unsigned int i=0;i<5; i++)
+     MPI_Allreduce(MPI_IN_PLACE,
+                                  dMat.begin(),
+                                  dMat.size(),
+                                  dataTypes::mpi_type_id(
+                                    dMat.begin()),
+                                  MPI_SUM,
+                                  MPI_COMM_WORLD);
+
+
+
   dftfe::utils::deviceSynchronize();
   MPI_Barrier(MPI_COMM_WORLD);
   t1 = MPI_Wtime();

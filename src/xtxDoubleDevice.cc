@@ -113,6 +113,7 @@ namespace dftfe
               // Compute local XTrunc^{T}*XcBlock.
               if (ivec == 0)
                 {
+                  /*
                   dftfe::utils::deviceBlasWrapper::gemm(
                     handle,
                     dftfe::utils::DEVICEBLAS_OP_N,
@@ -128,6 +129,7 @@ namespace dftfe
                     &scalarCoeffBeta,
                     overlapMatrixBlock.begin(),
                     D);
+                  */
                   // record completion of compute for first block
                   dftfe::utils::deviceEventRecord(computeEvents[blockCount],
                                                   streamCompute);
@@ -154,6 +156,7 @@ namespace dftfe
               if (ivecNew <N)
                 {
                   // evaluate X^{T} times XBlock
+                  /*
                   dftfe::utils::deviceBlasWrapper::gemm(
                     handle,
                     dftfe::utils::DEVICEBLAS_OP_N,
@@ -169,6 +172,7 @@ namespace dftfe
                     &scalarCoeffBeta,
                     overlapMatrixBlockNext.begin(),
                     DNew);
+                  */
                   // record completion of compute for next block
                   dftfe::utils::deviceEventRecord(computeEvents[blockCount + 1],
                                                   streamCompute);
@@ -243,7 +247,7 @@ void benchmarkXtXDouble(const MPI_Comm & mpi_communicator)
   std::cout << std::scientific << std::setprecision(18);
 
   /////INPUTS/////
-  const unsigned int globalNumDofs=70000;//such that we have roughly 100k to 50k dofs per gpu when scaling from 2 GPU to 4 GPUs
+  const unsigned int globalNumDofs=16194277;//such that we have roughly 100k to 50k dofs per gpu when scaling from 2 GPU to 4 GPUs
   const unsigned int numberVectors=36600;//36600;//must be multiple of vectorsBlockSize
   const unsigned int vectorsBlockSize=732;
   ////////////////
