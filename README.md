@@ -105,7 +105,7 @@ Frontier results on benchmarkDeviceDirectMPIAllreduce
    module unload cray-libsci
    export MPICH_GPU_SUPPORT_ENABLED=1
 ```
-
+All RCCL results below on Frontier are without aws-rccl-ofi patch
   1 node and 8 GCDs (MPICH_SMP_SINGLE_COPY_MODE is default):
 ```
 Time in seconds for GPU Direct MPI_Allreduce using NCCL/RCCL: 8.236887570001272252e-01
