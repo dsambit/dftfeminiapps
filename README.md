@@ -104,6 +104,19 @@ Frontier results on benchmarkDeviceDirectMPIAllreduce
    module load openblas
    module unload cray-libsci
    export MPICH_GPU_SUPPORT_ENABLED=1
+
+$ module list
+Currently Loaded Modules:
+  1) craype-x86-trento                      10) cray-mpich/8.1.23
+  2) libfabric/1.15.2.0                     11) PrgEnv-gnu/8.3.3
+  3) craype-network-ofi                     12) darshan-runtime/3.4.0
+  4) perftools-base/22.12.0                 13) hsi/default
+  5) xpmem/2.5.2-2.4_3.45__gd0f7936.shasta  14) DefApps/default
+  6) cray-pmi/6.1.8                         15) craype-accel-amd-gfx90a
+  7) gcc/12.2.0                             16) rocm/5.3.0
+  8) craype/2.7.19                          17) cmake/3.23.2
+  9) cray-dsmml/0.2.2                       18) openblas/0.3.17
+
 ```
 All RCCL results below on Frontier are without aws-rccl-ofi patch
   1 node and 8 GCDs (MPICH_SMP_SINGLE_COPY_MODE is default):
