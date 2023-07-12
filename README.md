@@ -9,9 +9,7 @@ Currently there are two bencharks that are called from src/main.cc:
 
 Steps to compile
 ==========================================
-* Install NCCL/RCCL library or load the appropriate module if available
-
-* Modify setupCrusher.sh to set CXX compiler, CXX compiler flags, NCCL/RCCL library paths, and CUDA/HIP compiler paths.
+* Modify setupFrontier.sh to set CXX compiler, CXX compiler flags, NCCL/RCCL library paths, and CUDA/HIP compiler paths.
 
 * mkdir build and cd build (this directory can be created anywhere)
 
@@ -95,3 +93,41 @@ Time in seconds for GPU Direct MPI_Allreduce using NCCL/RCCL: 2.2389947169999686
 Time in seconds for GPU Direct MPI_Allreduce using standard MPI library: 5.128894410000157222e+00
 ```  
 
+Frontier results on benchmarkDeviceDirectMPIAllreduce
+ -------------
+```
+
+   module load PrgEnv-gnu
+   module load craype-accel-amd-gfx90a
+   module load rocm
+   module load cmake
+   module load openblas
+   module unload cray-libsci
+   export MPICH_GPU_SUPPORT_ENABLED=1
+```
+
+  1 node and 8 GCDs (MPICH_SMP_SINGLE_COPY_MODE is default):
+```
+Time in seconds for GPU Direct MPI_Allreduce using NCCL/RCCL: 8.236887570001272252e-01
+Time in seconds for GPU Direct MPI_Allreduce using standard MPI library: 4.652598662999935186e+00
+```
+
+  2 nodes and 16 GCDs (MPICH_SMP_SINGLE_COPY_MODE is default):
+```
+Time in seconds for GPU Direct MPI_Allreduce using NCCL/RCCL: 2.978673024000272562e+00
+Time in seconds for GPU Direct MPI_Allreduce using standard MPI library: 5.049497311999857629e+00
+```
+
+  1 node and 8 GCDs:
+```
+export MPICH_SMP_SINGLE_COPY_MODE=NONE
+Time in seconds for GPU Direct MPI_Allreduce using NCCL/RCCL: 8.236887570001272252e-01
+Time in seconds for GPU Direct MPI_Allreduce using standard MPI library: 4.652598662999935186e+00
+```
+
+  2 nodes and 16 GCDs:
+```
+export MPICH_SMP_SINGLE_COPY_MODE=NONE
+Time in seconds for GPU Direct MPI_Allreduce using NCCL/RCCL: 2.978673024000272562e+00
+Time in seconds for GPU Direct MPI_Allreduce using standard MPI library: 5.049497311999857629e+00
+```
