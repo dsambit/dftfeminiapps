@@ -13,7 +13,7 @@ Steps to compile
 
 * mkdir build and cd build (this directory can be created anywhere)
 
-* bash `miniappSourceFullPath'/setupCrusher.sh  
+* bash `miniappSourceFullPath'/setupFrontier.sh  (Appropriate linking flags for GPU Direct MPICH is used here)
   
 Summit results on benchmarkDeviceDirectMPIAllreduce
 -------------
