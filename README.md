@@ -118,7 +118,7 @@ Currently Loaded Modules:
   9) cray-dsmml/0.2.2                       18) openblas/0.3.17
 
 ```
-All RCCL results below on Frontier are without aws-rccl-ofi patch\
+All RCCL results below on Frontier are without aws-rccl-ofi patch
 
  1 node and 8 GCDs (MPICH_SMP_SINGLE_COPY_MODE is default):
 ```
