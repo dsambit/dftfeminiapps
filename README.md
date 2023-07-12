@@ -118,8 +118,9 @@ Currently Loaded Modules:
   9) cray-dsmml/0.2.2                       18) openblas/0.3.17
 
 ```
-All RCCL results below on Frontier are without aws-rccl-ofi patch
-  1 node and 8 GCDs (MPICH_SMP_SINGLE_COPY_MODE is default):
+All RCCL results below on Frontier are without aws-rccl-ofi patch\
+
+ 1 node and 8 GCDs (MPICH_SMP_SINGLE_COPY_MODE is default):
 ```
 Time in seconds for GPU Direct MPI_Allreduce using NCCL/RCCL: 2.962938810001105594e-01
 Time in seconds for GPU Direct MPI_Allreduce using standard MPI library: 1.767420677000018259e+00
