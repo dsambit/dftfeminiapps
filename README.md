@@ -121,26 +121,26 @@ Currently Loaded Modules:
 All RCCL results below on Frontier are without aws-rccl-ofi patch
   1 node and 8 GCDs (MPICH_SMP_SINGLE_COPY_MODE is default):
 ```
-Time in seconds for GPU Direct MPI_Allreduce using NCCL/RCCL: 8.236887570001272252e-01
-Time in seconds for GPU Direct MPI_Allreduce using standard MPI library: 4.652598662999935186e+00
+Time in seconds for GPU Direct MPI_Allreduce using NCCL/RCCL: 2.962938810001105594e-01
+Time in seconds for GPU Direct MPI_Allreduce using standard MPI library: 1.767420677000018259e+00
 ```
 
   2 nodes and 16 GCDs (MPICH_SMP_SINGLE_COPY_MODE is default):
 ```
-Time in seconds for GPU Direct MPI_Allreduce using NCCL/RCCL: 2.978673024000272562e+00
-Time in seconds for GPU Direct MPI_Allreduce using standard MPI library: 5.049497311999857629e+00
+Time in seconds for GPU Direct MPI_Allreduce using NCCL/RCCL: 6.913603289999628032e-01
+Time in seconds for GPU Direct MPI_Allreduce using standard MPI library: 1.886262456000167731e+00
 ```
 
   1 node and 8 GCDs:
 ```
 export MPICH_SMP_SINGLE_COPY_MODE=NONE
-Time in seconds for GPU Direct MPI_Allreduce using NCCL/RCCL: 8.236887570001272252e-01
-Time in seconds for GPU Direct MPI_Allreduce using standard MPI library: 4.652598662999935186e+00
+Time in seconds for GPU Direct MPI_Allreduce using NCCL/RCCL: 2.945046769998498348e-01
+Time in seconds for GPU Direct MPI_Allreduce using standard MPI library: 2.762089984999875014e+00
 ```
 
   2 nodes and 16 GCDs:
 ```
 export MPICH_SMP_SINGLE_COPY_MODE=NONE
-Time in seconds for GPU Direct MPI_Allreduce using NCCL/RCCL: 2.978673024000272562e+00
-Time in seconds for GPU Direct MPI_Allreduce using standard MPI library: 5.049497311999857629e+00
+Time in seconds for GPU Direct MPI_Allreduce using NCCL/RCCL: 6.609293199999228818e-01
+Time in seconds for GPU Direct MPI_Allreduce using standard MPI library: 2.946769545000051949e+00
 ```
