@@ -132,6 +132,12 @@ Time in seconds for GPU Direct MPI_Allreduce using NCCL/RCCL: 6.9136032899996280
 Time in seconds for GPU Direct MPI_Allreduce using standard MPI library: 1.886262456000167731e+00
 ```
 
+  1000 nodes and 8000 GCDs (MPICH_SMP_SINGLE_COPY_MODE is default):
+```
+Time in seconds for GPU Direct MPI_Allreduce using NCCL/RCCL: 2.802455802000054064e+00
+Time in seconds for GPU Direct MPI_Allreduce using standard MPI library: 4.341467201000000387e+00
+```
+
   1 node and 8 GCDs:
 ```
 export MPICH_SMP_SINGLE_COPY_MODE=NONE
@@ -144,4 +150,11 @@ Time in seconds for GPU Direct MPI_Allreduce using standard MPI library: 2.76208
 export MPICH_SMP_SINGLE_COPY_MODE=NONE
 Time in seconds for GPU Direct MPI_Allreduce using NCCL/RCCL: 6.609293199999228818e-01
 Time in seconds for GPU Direct MPI_Allreduce using standard MPI library: 2.946769545000051949e+00
+```
+
+  1000 nodes and 8000 GCDs:
+```
+export MPICH_SMP_SINGLE_COPY_MODE=NONE
+Time in seconds for GPU Direct MPI_Allreduce using NCCL/RCCL: 3.947417828999959966e+00
+Time in seconds for GPU Direct MPI_Allreduce using standard MPI library: 5.121270022000032895e+00
 ```
