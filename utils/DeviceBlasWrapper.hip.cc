@@ -22,9 +22,9 @@
 #  include <DeviceDataTypeOverloads.h>
 #  include <DeviceKernelLauncherConstants.h>
 #  include <Exceptions.h>
-#  include <hipblas.h>
+#  include <hipblas/hipblas.h>
 #  ifdef DFTFE_WITH_DEVICE_AMD
-#    include <rocblas.h>
+#    include <rocblas/rocblas.h>
 #  endif
 namespace dftfe
 {

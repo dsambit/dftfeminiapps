@@ -28,13 +28,13 @@ withGPUAwareMPI=ON #Please use this option with care
                    #to be fast
 
 #Option to link to NCCL library (Only for GPU compilation)
-withDCCL=ON
+withDCCL=OFF
 
 #Compiler options and flags
 cxx_compiler=CC  #sets DCMAKE_CXX_COMPILER
-cxx_flags="-fPIC -I${MPICH_DIR}/include -I${ROCM_PATH}/include" #sets DCMAKE_CXX_FLAGS
+cxx_flags="-march=znver3 -fPIC -I$MPICH_DIR/include -I$ROCM_PATH/include -I$ROCM_PATH/include/hip -I$ROCM_PATH/include/hipblas -I$ROCM_PATH/include/rocblas" #sets DCMAKE_CXX_FLAGS
 cxx_flagsRelease="-O2" #sets DCMAKE_CXX_FLAGS_RELEASE
-device_flags="-O2 -munsafe-fp-atomics -I${MPICH_DIR}/include -I${ROCM_PATH}/include"
+device_flags="-march=znver3 -O2 -munsafe-fp-atomics -I$MPICH_DIR/include -I$ROCM_PATH/include -I$ROCM_PATH/include/hip -I$ROCM_PATH/include/hipblas -I$ROCM_PATH/include/rocblas"
                            #setDCMAKE_CXX_CUDA/HIP_FLAGS 
                            #(only applicable for withGPU=ON)
 device_architectures="gfx90a" # set DCMAKE_CXX_CUDA/HIP_ARCHITECTURES 
@@ -57,7 +57,7 @@ out=`echo "$build_type" | tr '[:upper:]' '[:lower:]'`
 
 function cmake_() {
   if [ "$gpuLang" = "cuda" ]; then
-    cmake -DCMAKE_CXX_STANDARD=14 -DCMAKE_CXX_COMPILER=$cxx_compiler\
+    cmake -DCMAKE_CXX_STANDARD=17 -DCMAKE_CXX_COMPILER=$cxx_compiler\
     -DCMAKE_CXX_FLAGS="$cxx_flags"\
     -DCMAKE_CXX_FLAGS_RELEASE="$cxx_flagsRelease" \
     -DCMAKE_BUILD_TYPE=$build_type \
@@ -65,14 +65,13 @@ function cmake_() {
     -DWITH_GPU=$withGPU -DGPU_LANG=$gpuLang -DGPU_VENDOR=$gpuVendor -DWITH_GPU_AWARE_MPI=$withGPUAwareMPI -DCMAKE_CUDA_FLAGS="$device_flags" -DCMAKE_CUDA_ARCHITECTURES="$device_architectures"\
     $1
   elif [ "$gpuLang" = "hip" ]; then
-    cmake -DCMAKE_CXX_STANDARD=14 -DCMAKE_CXX_COMPILER=$cxx_compiler\
+    cmake -DCMAKE_CXX_STANDARD=17 -DCMAKE_CXX_COMPILER=$cxx_compiler\
     -DCMAKE_CXX_FLAGS="$cxx_flags"\
     -DCMAKE_CXX_FLAGS_RELEASE="$cxx_flagsRelease" \
     -DCMAKE_BUILD_TYPE=$build_type \
     -DWITH_DCCL=$withDCCL -DCMAKE_PREFIX_PATH="$DCCL_PATH"\
     -DWITH_GPU=$withGPU -DGPU_LANG=$gpuLang -DGPU_VENDOR=$gpuVendor -DWITH_GPU_AWARE_MPI=$withGPUAwareMPI -DCMAKE_HIP_FLAGS="$device_flags" -DCMAKE_HIP_ARCHITECTURES="$device_architectures"\
-    -DCMAKE_SHARED_LINKER_FLAGS="-L${ROCM_PATH}/lib -lamdhip64 -L${MPICH_DIR}/lib -lmpi ${CRAY_XPMEM_POST_LINK_OPTS} -lxpmem ${PE_MPICH_GTL_DIR_amd_gfx90a} ${PE_MPICH_GTL_LIBS_amd_gfx90a}"\
-     $1  
+    -DCMAKE_SHARED_LINKER_FLAGS="-L$ROCM_PATH/lib -L$MPICH_DIR/lib -lmpi $CRAY_XPMEM_POST_LINK_OPTS -lxpmem $PE_MPICH_GTL_DIR_amd_gfx90a $PE_MPICH_GTL_LIBS_amd_gfx90a" $1  
   fi
 }
 

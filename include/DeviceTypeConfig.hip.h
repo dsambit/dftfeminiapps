@@ -19,7 +19,7 @@
 
 #include <hip/hip_runtime.h>
 #include <hip/hip_complex.h>
-#include <hipblas.h>
+#include <hipblas/hipblas.h>
 namespace dftfe
 {
   namespace utils
