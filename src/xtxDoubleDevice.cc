@@ -113,7 +113,6 @@ namespace dftfe
               // Compute local XTrunc^{T}*XcBlock.
               if (ivec == 0)
                 {
-                  /*
                   dftfe::utils::deviceBlasWrapper::gemm(
                     handle,
                     dftfe::utils::DEVICEBLAS_OP_N,
@@ -129,7 +128,6 @@ namespace dftfe
                     &scalarCoeffBeta,
                     overlapMatrixBlock.begin(),
                     D);
-                  */
                   // record completion of compute for first block
                   dftfe::utils::deviceEventRecord(computeEvents[blockCount],
                                                   streamCompute);
@@ -156,7 +154,6 @@ namespace dftfe
               if (ivecNew <N)
                 {
                   // evaluate X^{T} times XBlock
-                  /*
                   dftfe::utils::deviceBlasWrapper::gemm(
                     handle,
                     dftfe::utils::DEVICEBLAS_OP_N,
@@ -172,7 +169,6 @@ namespace dftfe
                     &scalarCoeffBeta,
                     overlapMatrixBlockNext.begin(),
                     DNew);
-                  */
                   // record completion of compute for next block
                   dftfe::utils::deviceEventRecord(computeEvents[blockCount + 1],
                                                   streamCompute);
